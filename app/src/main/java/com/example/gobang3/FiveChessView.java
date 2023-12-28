@@ -12,8 +12,7 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
-/**
- * Created by ZhangHao on 2017/6/27.
+/**.
  * 五子棋 View
  */
 
