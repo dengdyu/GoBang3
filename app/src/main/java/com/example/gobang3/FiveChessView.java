@@ -46,6 +46,12 @@ public class FiveChessView extends View implements View.OnTouchListener {
     private GameCallBack callBack;
     //当前黑白棋胜利次数
     private int whiteChessCount, blackChessCount;
+    //是否是玩家的回合
+    private boolean isUserBout = true;
+    //玩家执子颜色
+    private int userChess = WHITE_CHESS;
+    //玩家/AI胜利次数
+    private int userScore = 0, aiScore = 0;
     /**
      * 一些常量
      */
@@ -53,6 +59,8 @@ public class FiveChessView extends View implements View.OnTouchListener {
     public static final int WHITE_CHESS = 1;
     //黑棋
     public static final int BLACK_CHESS = 2;
+    //无棋
+    public static final int NO_CHESS = 0;
     //白棋赢
     public static final int WHITE_WIN = 101;
     //黑棋赢
@@ -183,6 +191,14 @@ public class FiveChessView extends View implements View.OnTouchListener {
                             } else {
                                 blackChessCount++;
                             }
+
+                            //判断玩家/AI 胜利
+                            if (userChess == chess) {
+                                userScore++;
+                            } else {
+                                aiScore++;
+                            }
+
                             callBack.GameOver(chess == WHITE_CHESS ? WHITE_WIN : BLACK_WIN);
                         }
                         return;
@@ -251,6 +267,11 @@ public class FiveChessView extends View implements View.OnTouchListener {
         return false;
     }
 
+    public void checkAiGameOver() {
+        isWhite = userChess == WHITE_CHESS;
+        checkGameOver();
+    }
+
     @Override
     public boolean onTouch(View v, MotionEvent event) {
         switch (event.getAction()) {
@@ -269,9 +290,11 @@ public class FiveChessView extends View implements View.OnTouchListener {
                         if (chessArray[x][y] != WHITE_CHESS &&
                                 chessArray[x][y] != BLACK_CHESS) {
                             //给数组赋值
-                            chessArray[x][y] = isWhite ? WHITE_CHESS : BLACK_CHESS;
-                            //修改当前执子
-                            isWhite = !isWhite;
+                            chessArray[x][y] = userChess;
+                            //修改当前落子颜色
+                            isWhite = userChess == WHITE_CHESS;
+                            //修改当前为电脑执子
+                            isUserBout = false;
                             //更新棋盘
                             postInvalidate();
                             //判断是否结束
@@ -282,9 +305,9 @@ public class FiveChessView extends View implements View.OnTouchListener {
                             }
                         }
                     }
-                } else {
-                    System.out.println("游戏结束，重新开始！");
-                    /*Toast.makeText(mContext, "游戏已经结束，请重新开始！", Toast.LENGTH_SHORT).show();*/
+                } else if (isGameOver) {
+                    Toast.makeText(getContext(), "游戏已经结束，请重新开始！",
+                            Toast.LENGTH_SHORT).show();
                 }
                 break;
         }
@@ -301,5 +324,25 @@ public class FiveChessView extends View implements View.OnTouchListener {
 
     public int getBlackChessCount() {
         return blackChessCount;
+    }
+
+    public int[][] getChessArray() {
+        return chessArray;
+    }
+
+    public void setUserBout(boolean userBout) {
+        isUserBout = userBout;
+    }
+
+    public void setUserChess(int userChess) {
+        this.userChess = userChess;
+    }
+
+    public int getUserScore() {
+        return userScore;
+    }
+
+    public int getAiScore() {
+        return aiScore;
     }
 }

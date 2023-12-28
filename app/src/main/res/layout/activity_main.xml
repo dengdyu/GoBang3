@@ -7,7 +7,6 @@
     android:background="@drawable/bg"
     android:orientation="vertical">
     <!--游戏信息-->
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,29 +14,66 @@
         android:layout_marginBottom="10dp"
         android:orientation="horizontal">
         <!--白棋信息-->
+        <!--玩家信息-->
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="60dp"
+            android:layout_weight="2"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="30dp"
+            <RelativeLayout
+                android:layout_width="wrap_content"
                 android:layout_height="30dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/white_chess"
-                android:contentDescription="@null" />
+                android:orientation="horizontal">
+                <!--玩家名-->
+                <TextView
+                    android:id="@+id/user_name_tv"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:gravity="center"
+                    android:text="player"
+                    android:textSize="16sp" /><!--android:text="@string/player"-->
+                <!--玩家当前执子-->
+                <ImageView
+                    android:id="@+id/user_chess_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/user_name_tv"
+                    android:background="@drawable/white_chess"
+                    android:contentDescription="@null" />
+            </RelativeLayout>
 
-            <TextView
-                android:id="@+id/white_count_tv"
+            <!--得分信息-->
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="0"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/user_score_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:text="Score : 0"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/user_think_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/user_score_tv"
+                    android:background="@drawable/think" />
+            </RelativeLayout>
         </LinearLayout>
 
         <RelativeLayout
@@ -56,27 +92,64 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
+            android:layout_height="60dp"
+            android:layout_weight="2"
             android:orientation="vertical">
 
-            <ImageView
-                android:layout_width="20dp"
-                android:layout_height="20dp"
-                android:layout_gravity="center_horizontal"
-                android:layout_marginTop="5dp"
-                android:background="@drawable/black_chess"
-                android:contentDescription="@null" />
-
-            <TextView
-                android:id="@+id/black_count_tv"
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="10dp"
-                android:text="0"
-                android:textColor="#000000"
-                android:textSize="16sp" />
+                android:orientation="horizontal">
+                <!--ai当前执子-->
+                <ImageView
+                    android:id="@+id/ai_chess_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:background="@drawable/black_chess"
+                    android:contentDescription="@null" />
+                <!--AI 名-->
+                <TextView
+                    android:id="@+id/ai_name_tv"
+                    android:layout_width="40dp"
+                    android:layout_height="match_parent"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:layout_toEndOf="@id/ai_chess_iv"
+                    android:gravity="center"
+                    android:text="computer"
+                    android:textSize="16sp" />
+
+            </RelativeLayout>
+            <!--得分信息-->
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="center_horizontal"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/ai_score_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="10dp"
+                    android:text="Score : 0"
+                    android:textColor="#ffffff"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/ai_think_iv"
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_centerVertical="true"
+                    android:layout_marginStart="20dp"
+                    android:layout_toEndOf="@id/ai_score_tv"
+                    android:background="@drawable/think" />
+            </RelativeLayout>
+
         </LinearLayout>
     </LinearLayout>
     <!--游戏界面-->
