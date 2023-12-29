@@ -26,7 +26,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
 
     private int[][] chessArray;//棋子数组
 
-    private boolean isWhite = true;//当前下棋顺序(默认白棋先下)
+    private boolean isBlack = true;//当前下棋顺序(默认黑棋先下)
 
     private boolean isGameOver = false;//游戏是否结束
 
@@ -178,7 +178,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
      */
     private void checkGameOver() {
         //获取落子的颜色(如果当前是白棋，则落子是黑棋)
-        int chess = isWhite ? BLACK_CHESS : WHITE_CHESS;
+        int chess = isBlack ? WHITE_CHESS : BLACK_CHESS;
         //棋盘是否填满
         boolean isFull = true;
         //遍历chessArray
@@ -275,7 +275,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
     }
 
     public void checkAiGameOver() {        //TODO ???
-        isWhite = userChess == WHITE_CHESS;
+            isBlack = userChess == BLACK_CHESS;
         checkGameOver();
     }
     /**
@@ -302,7 +302,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
                             chessArray[x][y] = userChess;
                             userMoves.push(new Point(x, y));//记录用户下棋位置
                             //修改当前落子颜色
-                            isWhite = userChess == WHITE_CHESS;//TODO ???
+                            isBlack = userChess == BLACK_CHESS;
                             //修改当前为电脑执子
                             isUserBout = false;
                             //更新棋盘
@@ -311,7 +311,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
                             checkGameOver();
                             //回调当前执子
                             if (callBack != null) {
-                                callBack.ChangeGamer(isWhite);
+                                callBack.ChangeGamer(isBlack);
                             }
                         }
                     }
@@ -340,14 +340,6 @@ public class FiveChessView extends View implements View.OnTouchListener {
 
     public void setCallBack(GameCallBack callBack) {
         this.callBack = callBack;
-    }
-
-    public int getWhiteChessCount() {
-        return whiteChessCount;
-    }
-
-    public int getBlackChessCount() {
-        return blackChessCount;
     }
 
     public int[][] getChessArray() {

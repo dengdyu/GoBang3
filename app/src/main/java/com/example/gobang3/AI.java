@@ -15,11 +15,11 @@ import java.util.Stack;
 
 public class AI implements Runnable {
     private int[][] chessArray;//棋盘信息
-    private int aiChess = FiveChessView.BLACK_CHESS;//电脑执子（默认黑子）
+    private int aiChess = FiveChessView.WHITE_CHESS;//电脑执子（默认黑子）
     private List<Point> pointList;//所有无子位置的信息集合
     private AICallBack callBack;//ai落子结束回调
     private int panelLength;//棋盘宽高
-    public Stack<Point> aiMoves;//初始化ai下棋记录; // AI下棋记录
+    public Stack<Point> aiMoves;//初始化ai下棋记录;
 
     /**
      * 评分表（落子优先级评分）
@@ -118,7 +118,7 @@ public class AI implements Runnable {
         }
         //休眠2秒
         try {
-            Thread.sleep(2000);
+            Thread.sleep(500);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

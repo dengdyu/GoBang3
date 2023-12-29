@@ -64,15 +64,6 @@
                     android:text="Score : 0"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/user_think_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/user_score_tv"
-                    android:background="@drawable/think" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -148,15 +139,6 @@
                     android:text="Score : 0"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/ai_think_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/ai_score_tv"
-                    android:background="@drawable/think" />
             </RelativeLayout>
 
         </LinearLayout>
