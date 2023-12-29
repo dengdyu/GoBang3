@@ -12,6 +12,8 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Toast;
 
+import java.util.Stack;
+
 /**
  * 五子棋基本功能
  */
@@ -50,6 +52,8 @@ public class FiveChessView extends View implements View.OnTouchListener {
     private int userChess = WHITE_CHESS;//玩家执子颜色，默认白色
 
     private int userScore = 0, aiScore = 0;//玩家/AI胜利次数
+    private Stack<Point> userMoves; // 用户下棋记录
+
 
     /**
      * 一些常量
@@ -104,6 +108,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
         rect = new Rect();
         //设置点击监听
         setOnTouchListener(this);
+        userMoves = new Stack<>();//初始化用户下棋记录
     }
 
     /**
@@ -295,6 +300,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
                                 chessArray[x][y] != BLACK_CHESS) {
                             //给数组赋值
                             chessArray[x][y] = userChess;
+                            userMoves.push(new Point(x, y));//记录用户下棋位置
                             //修改当前落子颜色
                             isWhite = userChess == WHITE_CHESS;//TODO ???
                             //修改当前为电脑执子
@@ -316,6 +322,20 @@ public class FiveChessView extends View implements View.OnTouchListener {
                 break;
         }
         return false;
+    }
+
+    public void undoMove1(){
+        if (!isGameOver) {
+            if(userMoves.size() >= 1){
+                Point userLastMove = userMoves.pop();
+                int userLastX = userLastMove.getX();
+                int userLastY = userLastMove.getY();
+                chessArray[userLastX][userLastY] = NO_CHESS;
+                postInvalidate(); // 更新UI
+            } else {
+                Toast.makeText(getContext(), "没有棋了", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
     public void setCallBack(GameCallBack callBack) {

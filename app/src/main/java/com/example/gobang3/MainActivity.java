@@ -26,9 +26,9 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
     private AI ai;
     private PopupWindow chooseChess;//玩家选择执子窗口，TODO：加上选择难度功能
 
-    private Button restartB;//重新开始按钮
-    /*private Button retractB;//悔棋按钮
-    private Button exitB;//悔棋按钮*/
+    //private Button restartB;//重新开始按钮
+    private Button retractB;//悔棋按钮
+    /*private Button exitB;//悔棋按钮*/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,6 +47,24 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
                 initPop(wm.getDefaultDisplay().getWidth(), wm.getDefaultDisplay().getHeight());
             }
         });
+        retractB = findViewById(R.id.retract);
+        retractB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                fiveChessView.undoMove1();
+                ai.undoMove2();
+            }
+        });
+
+        /*retractB = findViewById(R.id.retract);//TODO 退出功能
+        exitB = findViewById(R.id.exit_game);
+
+        exitB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+
+            }
+        });*/
 
     }
     private void initViews() {
@@ -67,29 +85,6 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         findViewById(R.id.restart_game).setOnClickListener(this);
     }
 
-        /*retractB = findViewById(R.id.retract);
-        exitB = findViewById(R.id.exit_game);
-
-        restartB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                fiveChessView.resetGame();
-            }
-        });
-
-        retractB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-
-            }
-        });
-
-        exitB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-
-            }
-        });*/
         //初始化PopupWindow
         private void initPop(int width, int height) {
             if (chooseChess == null) {
@@ -172,6 +167,8 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         } else if (viewId == R.id.choose_white) {
             changeUI(true);
             chooseChess.dismiss();
+        } else if(viewId == R.id.retract) {
+            System.out.println("我点了悔棋");
         }
     }
 

@@ -1,8 +1,13 @@
 package com.example.gobang3;
 
+import static java.security.AccessController.getContext;
+
+import android.widget.Toast;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.Stack;
 
 /**
  * 五子棋简单的AI
@@ -14,6 +19,8 @@ public class AI implements Runnable {
     private List<Point> pointList;//所有无子位置的信息集合
     private AICallBack callBack;//ai落子结束回调
     private int panelLength;//棋盘宽高
+    public Stack<Point> aiMoves;//初始化ai下棋记录; // AI下棋记录
+
     /**
      * 评分表（落子优先级评分）
      * FIVE 至少能五子相连
@@ -37,6 +44,7 @@ public class AI implements Runnable {
         this.chessArray = chessArray;
         this.callBack = callBack;
         this.panelLength = chessArray.length;
+        aiMoves = new Stack<>();
     }
 
     //ai开始落子
@@ -72,7 +80,16 @@ public class AI implements Runnable {
                 + getLeftSlashPriority(x, y, userChess)
                 + getRightSlashPriority(x, y, userChess);
     }
-
+    public void undoMove2(){
+        if(aiMoves.size()>=1) {
+            Point aiLastMove = aiMoves.pop();
+            int aiLastX = aiLastMove.getX();
+            int aiLastY = aiLastMove.getY();
+            chessArray[aiLastX][aiLastY] = 0;
+        }else {
+            System.out.println("no more chess");
+        }
+    }
     //通过线程选择最佳落点
     @Override
     public void run() {
@@ -107,6 +124,7 @@ public class AI implements Runnable {
         }
         //落子，并将结果回调
         chessArray[max.getX()][max.getY()] = aiChess;
+        aiMoves.push(new Point(max.getX(),max.getY()));
         callBack.aiAtTheBell();
     }
 
