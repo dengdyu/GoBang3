@@ -19,17 +19,12 @@ import com.example.gobang3.*;
 
 public class MainActivity extends AppCompatActivity implements GameCallBack , AICallBack ,View.OnClickListener{
 
-    private FiveChessView fiveChessView;
-    private TextView userScoreTv, aiScoreTv;
-
-    //显示玩家/ai执子
-    private ImageView userChessIv, aiChessIv;
-    //玩家/ai回合标识
-    private ImageView userTimeIv, aiTimeIv;
-    //游戏ai
+    private FiveChessView fiveChessView;//五子棋基本功能
+    private TextView userScoreTv, aiScoreTv;//分数
+    private ImageView userChessIv, aiChessIv;//显示玩家/ai执子
+    private ImageView userTimeIv, aiTimeIv;//玩家/ai回合标识
     private AI ai;
-    //PopUpWindow选择玩家执子
-    private PopupWindow chooseChess;
+    private PopupWindow chooseChess;//玩家选择执子窗口，TODO：加上选择难度功能
 
     private Button restartB;//重新开始按钮
     /*private Button retractB;//悔棋按钮
@@ -43,9 +38,10 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         //初始化ai
         ai = new AI(fiveChessView.getChessArray(), this);
         //view加载完成
+        //注册全局布局监听器
         fiveChessView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onGlobalLayout() {
+            public void onGlobalLayout() {//获取屏幕的宽和高
                 //初始化PopupWindow
                 WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
                 initPop(wm.getDefaultDisplay().getWidth(), wm.getDefaultDisplay().getHeight());
@@ -103,8 +99,8 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
                 white.setOnClickListener(this);
                 black.setOnClickListener(this);
                 chooseChess = new PopupWindow(view, width, height);
-                chooseChess.setOutsideTouchable(false);
-                chooseChess.showAtLocation(fiveChessView, Gravity.CENTER, 0, 0);
+                chooseChess.setOutsideTouchable(false);//外部区域设置为不可点击
+                chooseChess.showAtLocation(fiveChessView, Gravity.CENTER, 0, 0);//显示在屏幕上
             }
         }
     @Override
@@ -113,7 +109,7 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         updateWinInfo();
         switch (winner) {
             case FiveChessView.BLACK_WIN:
-                showToast("黑棋胜利！");
+                showToast("黑棋胜利！");//TODO：改成不是Toast
                 break;
             case FiveChessView.NO_WIN:
                 showToast("平局！");
@@ -135,8 +131,8 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         //ai回合
         ai.aiBout();
         //更改当前落子
-        aiTimeIv.setVisibility(View.VISIBLE);
-        userTimeIv.setVisibility(View.GONE);
+        aiTimeIv.setVisibility(View.VISIBLE);//显示//TODO:换一种形式体现
+        userTimeIv.setVisibility(View.GONE);//隐藏
     }
 
     private void showToast(String str) {
@@ -144,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
     }
 
     @Override
-    public void aiAtTheBell() {
+    public void aiAtTheBell() {//TODO:看不懂
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
