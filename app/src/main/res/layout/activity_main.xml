@@ -18,7 +18,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -82,10 +82,19 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/white_turn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="白子回合"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/black_turn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="黑子回合"
                 android:textSize="24sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -93,7 +102,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <RelativeLayout

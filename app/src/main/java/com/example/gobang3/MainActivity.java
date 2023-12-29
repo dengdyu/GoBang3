@@ -28,7 +28,8 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
 
     //private Button restartB;//重新开始按钮
     private Button retractB;//悔棋按钮
-    /*private Button exitB;//悔棋按钮*/
+    /*private Button exitB;//退出按钮*/
+    private TextView whiteTurn, blackTurn;//显示谁的回合
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,6 +81,8 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         //玩家/ai回合标识
         userTimeIv = (ImageView) findViewById(R.id.user_think_iv);
         aiTimeIv = (ImageView) findViewById(R.id.ai_think_iv);
+        whiteTurn = findViewById(R.id.white_turn);
+        blackTurn = findViewById(R.id.black_turn);
         //restartB = findViewById(R.id.restart_game);
         //重开游戏设置点击事件
         findViewById(R.id.restart_game).setOnClickListener(this);
