@@ -19,21 +19,20 @@ import com.example.gobang3.*;
 
 public class MainActivity extends AppCompatActivity implements GameCallBack , AICallBack ,View.OnClickListener{
 
-    private FiveChessView fiveChessView;
-    private TextView userScoreTv, aiScoreTv;
-
-    //显示玩家/ai执子
-    private ImageView userChessIv, aiChessIv;
-    //玩家/ai回合标识
-    private ImageView userTimeIv, aiTimeIv;
-    //游戏ai
+    private FiveChessView fiveChessView;//五子棋基本功能
+    private TextView userScoreTv, aiScoreTv;//分数
+    private ImageView userChessIv, aiChessIv;//显示玩家/ai执子
     private AI ai;
-    //PopUpWindow选择玩家执子
-    private PopupWindow chooseChess;
+    private PopupWindow chooseChess;//玩家选择执子窗口，TODO：加上选择难度功能
 
-    private Button restartB;//重新开始按钮
-    /*private Button retractB;//悔棋按钮
-    private Button exitB;//悔棋按钮*/
+    //private Button restartB;//重新开始按钮
+    private Button retractB;//悔棋按钮
+    /*private Button exitB;//退出按钮*/
+    private TextView whiteTurn, blackTurn;//显示谁的回合
+    public boolean isUserBlack;//用户执黑棋吗
+    private Button easy;
+    private Button hard;
+    public int difficulty = -3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,15 +42,47 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         //初始化ai
         ai = new AI(fiveChessView.getChessArray(), this);
         //view加载完成
+        //注册全局布局监听器
         fiveChessView.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
             @Override
-            public void onGlobalLayout() {
+            public void onGlobalLayout() {//获取屏幕的宽和高
                 //初始化PopupWindow
                 WindowManager wm = (WindowManager) getSystemService(Context.WINDOW_SERVICE);
                 initPop(wm.getDefaultDisplay().getWidth(), wm.getDefaultDisplay().getHeight());
             }
         });
+        retractB = findViewById(R.id.retract);
+        retractB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                fiveChessView.undoMove1();
+                ai.undoMove2();
+            }
+        });
+        easy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                ai.setAiDiff(-1);
+            }
+        });
+        hard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                ai.setAiDiff(-3);
+            }
+        });
 
+        /*retractB = findViewById(R.id.retract);//TODO 退出功能
+        exitB = findViewById(R.id.exit_game);
+
+        exitB.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+
+            }
+        });*/
+        whiteTurn.setVisibility(View.GONE);//显示
+        blackTurn.setVisibility(View.GONE);//隐藏
     }
     private void initViews() {
         //五子棋UI
@@ -64,36 +95,15 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         userChessIv = (ImageView) findViewById(R.id.user_chess_iv);
         aiChessIv = (ImageView) findViewById(R.id.ai_chess_iv);
         //玩家/ai回合标识
-        userTimeIv = (ImageView) findViewById(R.id.user_think_iv);
-        aiTimeIv = (ImageView) findViewById(R.id.ai_think_iv);
+        whiteTurn = findViewById(R.id.white_turn);
+        blackTurn = findViewById(R.id.black_turn);
+        easy = findViewById(R.id.button);
+        hard = findViewById(R.id.button2);
         //restartB = findViewById(R.id.restart_game);
         //重开游戏设置点击事件
         findViewById(R.id.restart_game).setOnClickListener(this);
     }
 
-        /*retractB = findViewById(R.id.retract);
-        exitB = findViewById(R.id.exit_game);
-
-        restartB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                fiveChessView.resetGame();
-            }
-        });
-
-        retractB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-
-            }
-        });
-
-        exitB.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-
-            }
-        });*/
         //初始化PopupWindow
         private void initPop(int width, int height) {
             if (chooseChess == null) {
@@ -103,8 +113,8 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
                 white.setOnClickListener(this);
                 black.setOnClickListener(this);
                 chooseChess = new PopupWindow(view, width, height);
-                chooseChess.setOutsideTouchable(false);
-                chooseChess.showAtLocation(fiveChessView, Gravity.CENTER, 0, 0);
+                chooseChess.setOutsideTouchable(false);//外部区域设置为不可点击
+                chooseChess.showAtLocation(fiveChessView, Gravity.CENTER, 0, 0);//显示在屏幕上
             }
         }
     @Override
@@ -113,7 +123,7 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         updateWinInfo();
         switch (winner) {
             case FiveChessView.BLACK_WIN:
-                showToast("黑棋胜利！");
+                showToast("黑棋胜利！");//TODO：改成不是Toast
                 break;
             case FiveChessView.NO_WIN:
                 showToast("平局！");
@@ -131,12 +141,17 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
     }
 
     @Override
-    public void ChangeGamer(boolean isWhite) {
+    public void ChangeGamer(boolean isBlack) {
         //ai回合
         ai.aiBout();
         //更改当前落子
-        aiTimeIv.setVisibility(View.VISIBLE);
-        userTimeIv.setVisibility(View.GONE);
+        if(isUserBlack) {
+            whiteTurn.setVisibility(View.VISIBLE);//显示
+            blackTurn.setVisibility(View.GONE);//隐藏
+        } else {
+            blackTurn.setVisibility(View.VISIBLE);
+            whiteTurn.setVisibility(View.GONE);
+        }
     }
 
     private void showToast(String str) {
@@ -155,8 +170,13 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
                 //设置为玩家回合
                 fiveChessView.setUserBout(true);
                 //更改当前落子
-                aiTimeIv.setVisibility(View.GONE);
-                userTimeIv.setVisibility(View.VISIBLE);
+                if(isUserBlack) {
+                    blackTurn.setVisibility(View.VISIBLE);
+                    whiteTurn.setVisibility(View.GONE);
+                } else {
+                    whiteTurn.setVisibility(View.VISIBLE);
+                    blackTurn.setVisibility(View.GONE);
+                }
             }
         });
     }
@@ -171,39 +191,40 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
             //重新开始游戏
             fiveChessView.resetGame();
         } else if (viewId == R.id.choose_black) {
-            changeUI(false);
+            changeUI(true);
             chooseChess.dismiss();
         } else if (viewId == R.id.choose_white) {
-            changeUI(true);
+            changeUI(false);
             chooseChess.dismiss();
         }
     }
 
     //根据玩家选择执子，更新UI
-    private void changeUI(boolean isUserWhite) {
-        if (isUserWhite) {
-            //玩家选择白棋
-            fiveChessView.setUserChess(FiveChessView.WHITE_CHESS);
-            ai.setAiChess(FiveChessView.BLACK_CHESS);
+    private void changeUI(boolean isUserBlack) {
+        this.isUserBlack = isUserBlack;
+        if (isUserBlack) {
+            //玩家选择黑棋
+            fiveChessView.setUserChess(FiveChessView.BLACK_CHESS);
+            ai.setAiChess(FiveChessView.WHITE_CHESS);
             //玩家先手
             fiveChessView.setUserBout(true);
             //更改当前落子
-            userChessIv.setBackgroundResource(R.drawable.white_chess);
-            aiChessIv.setBackgroundResource(R.drawable.black_chess);
-            aiTimeIv.setVisibility(View.GONE);
-            userTimeIv.setVisibility(View.VISIBLE);
-        } else {
-            //玩家选择黑棋
-            fiveChessView.setUserChess(FiveChessView.BLACK_CHESS);
-            fiveChessView.setUserBout(false);
-            //ai先手
-            ai.setAiChess(FiveChessView.WHITE_CHESS);
-            ai.aiBout();
-            //更改当前落子
             userChessIv.setBackgroundResource(R.drawable.black_chess);
             aiChessIv.setBackgroundResource(R.drawable.white_chess);
-            aiTimeIv.setVisibility(View.VISIBLE);
-            userTimeIv.setVisibility(View.GONE);
+            whiteTurn.setVisibility(View.GONE);
+            blackTurn.setVisibility(View.VISIBLE);
+        } else {
+            //玩家选择白棋
+            fiveChessView.setUserChess(FiveChessView.WHITE_CHESS);
+            fiveChessView.setUserBout(false);
+            //ai先手
+            ai.setAiChess(FiveChessView.BLACK_CHESS);
+            ai.aiBout();
+            //更改当前落子
+            userChessIv.setBackgroundResource(R.drawable.white_chess);
+            aiChessIv.setBackgroundResource(R.drawable.black_chess);
+            blackTurn.setVisibility(View.VISIBLE);
+            whiteTurn.setVisibility(View.GONE);
         }
     }
 

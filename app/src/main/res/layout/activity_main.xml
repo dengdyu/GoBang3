@@ -18,7 +18,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -64,15 +64,6 @@
                     android:text="Score : 0"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/user_think_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/user_score_tv"
-                    android:background="@drawable/think" />
             </RelativeLayout>
         </LinearLayout>
 
@@ -82,10 +73,19 @@
             android:layout_weight="1">
 
             <TextView
+                android:id="@+id/white_turn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="白子回合"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+            <TextView
+                android:id="@+id/black_turn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:text="黑子回合"
                 android:textSize="24sp"
                 android:textStyle="bold" />
         </RelativeLayout>
@@ -93,7 +93,7 @@
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="60dp"
-            android:layout_weight="2"
+            android:layout_weight="1"
             android:orientation="vertical">
 
             <RelativeLayout
@@ -139,15 +139,6 @@
                     android:text="Score : 0"
                     android:textColor="#ffffff"
                     android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/ai_think_iv"
-                    android:layout_width="20dp"
-                    android:layout_height="20dp"
-                    android:layout_centerVertical="true"
-                    android:layout_marginStart="20dp"
-                    android:layout_toEndOf="@id/ai_score_tv"
-                    android:background="@drawable/think" />
             </RelativeLayout>
 
         </LinearLayout>
@@ -201,6 +192,19 @@
             android:background="@drawable/button_bg"
             android:text="重 玩"
             android:textSize="20sp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="简单" />
+
+        <Button
+            android:id="@+id/button2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/button"
+            android:text="难" />
 
 
     </RelativeLayout>
