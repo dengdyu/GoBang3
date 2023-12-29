@@ -49,7 +49,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
 
     private boolean isUserBout = true;//是否是玩家的回合
 
-    private int userChess = WHITE_CHESS;//玩家执子颜色，默认白色
+    private int userChess = BLACK_CHESS;//玩家执子颜色，默认黑色
 
     private int userScore = 0, aiScore = 0;//玩家/AI胜利次数
     private Stack<Point> userMoves; // 用户下棋记录
@@ -178,7 +178,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
      */
     private void checkGameOver() {
         //获取落子的颜色(如果当前是白棋，则落子是黑棋)
-        int chess = isBlack ? WHITE_CHESS : BLACK_CHESS;
+        int chess = isBlack ? BLACK_CHESS : WHITE_CHESS;
         //棋盘是否填满
         boolean isFull = true;
         //遍历chessArray
@@ -275,7 +275,7 @@ public class FiveChessView extends View implements View.OnTouchListener {
     }
 
     public void checkAiGameOver() {        //TODO ???
-            isBlack = userChess == BLACK_CHESS;
+            isBlack = userChess == WHITE_CHESS;
         checkGameOver();
     }
     /**

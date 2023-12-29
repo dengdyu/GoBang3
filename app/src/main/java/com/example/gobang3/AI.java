@@ -1,8 +1,8 @@
 package com.example.gobang3;
 
-import static java.security.AccessController.getContext;
+import static android.content.Intent.getIntent;
 
-import android.widget.Toast;
+import android.content.Intent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +20,7 @@ public class AI implements Runnable {
     private AICallBack callBack;//ai落子结束回调
     private int panelLength;//棋盘宽高
     public Stack<Point> aiMoves;//初始化ai下棋记录;
+    private int aiDiff = -3;//难度默认为HARD
 
     /**
      * 评分表（落子优先级评分）
@@ -39,6 +40,7 @@ public class AI implements Runnable {
     private final static int DEAD_ONE = 15;
     private final static int DEAD = 1;
 
+
     public AI(int[][] chessArray, AICallBack callBack) {
         pointList = new ArrayList<>();
         this.chessArray = chessArray;
@@ -53,10 +55,16 @@ public class AI implements Runnable {
     }
 
     //判断落子的优先级评分
-    private void checkPriority(Point p) {
+    private void checkPriorityH(Point p) {
         int aiPriority = checkSelf(p.getX(), p.getY());
         int userPriority = checkUser(p.getX(), p.getY());
-        p.setPriority(aiPriority >= userPriority ? aiPriority : userPriority);
+        p.setPriority(Math.max(aiPriority, userPriority));
+    }
+
+    private void checkPriorityE(Point p) {
+        int aiPriority = checkSelf(p.getX(), p.getY());
+        int userPriority = checkUser(p.getX(), p.getY());
+        p.setPriority(Math.min(aiPriority, userPriority));
     }
 
     //获取当前点，ai优先级评分
@@ -93,53 +101,103 @@ public class AI implements Runnable {
     //通过线程选择最佳落点
     @Override
     public void run() {
-        //清空pointList
-        pointList.clear();
-        int blankCount = 0;
-        for (int i = 0; i < panelLength; i++)
-            for (int j = 0; j < panelLength; j++) {
-                if (chessArray[i][j] == FiveChessView.NO_CHESS) {
-                    Point p = new Point(i, j);
-                    checkPriority(p);
-                    pointList.add(p);
-                    blankCount++;
+        if(aiDiff == -3){
+            pointList.clear();
+            int blankCount = 0;
+            for (int i = 0; i < panelLength; i++)
+                for (int j = 0; j < panelLength; j++) {
+                    if (chessArray[i][j] == FiveChessView.NO_CHESS) {
+                        Point p = new Point(i, j);
+                        checkPriorityH(p);
+                        pointList.add(p);
+                        blankCount++;
+                    }
+                }
+            //遍历pointList，找到优先级最高的Point
+            Point max = pointList.get(0);
+            for (Point point : pointList) {
+                if (max.getPriority() < point.getPriority()) {
+                    max = point;
                 }
             }
-        //遍历pointList，找到优先级最高的Point
-        Point max = pointList.get(0);
-        for (Point point : pointList) {
-            if (max.getPriority() < point.getPriority()) {
-                max = point;
+            //AI先手或者用户先手第一次落子时
+            if (blankCount >= panelLength * panelLength - 1) {
+                max = getStartPoint();
             }
+            //休眠0.5秒
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //落子，并将结果回调
+            chessArray[max.getX()][max.getY()] = aiChess;
+            aiMoves.push(new Point(max.getX(), max.getY()));
+            System.out.println(aiDiff);
+            callBack.aiAtTheBell();
+        } else if (aiDiff == -1){
+            pointList.clear();
+            int blankCount = 0;
+            for (int i = 0; i < panelLength; i++)
+                for (int j = 0; j < panelLength; j++) {
+                    if (chessArray[i][j] == FiveChessView.NO_CHESS) {
+                        Point p = new Point(i, j);
+                        checkPriorityE(p);
+                        pointList.add(p);
+                        blankCount++;
+                    }
+                }
+            //遍历pointList，找到优先级最高的Point
+            Point max = pointList.get(0);
+            for (Point point : pointList) {
+                if (max.getPriority() < point.getPriority()) {
+                    max = point;
+                }
+            }
+            //AI先手或者用户先手第一次落子时
+            if (blankCount >= panelLength * panelLength - 1) {
+                max = getStartPoint();
+            }
+            //休眠0.5秒
+            try {
+                Thread.sleep(500);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            //落子，并将结果回调
+            chessArray[max.getX()][max.getY()] = aiChess;
+            aiMoves.push(new Point(max.getX(), max.getY()));
+            callBack.aiAtTheBell();
         }
-        //AI先手或者用户先手第一次落子时
-        if (blankCount >= panelLength * panelLength - 1) {
-            max = getStartPoint();
-        }
-        //休眠2秒
-        try {
-            Thread.sleep(500);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        //落子，并将结果回调
-        chessArray[max.getX()][max.getY()] = aiChess;
-        aiMoves.push(new Point(max.getX(),max.getY()));
-        callBack.aiAtTheBell();
+
     }
 
     public void setAiChess(int aiChess) {
         this.aiChess = aiChess;
     }
-
+    public void setAiDiff(int aiDiff) {
+        this.aiDiff = aiDiff;
+    }
+    private Point easyPoint() {
+        //在中间位置随机生成一个点
+        Random random = new Random();
+        int x = random.nextInt(panelLength / 3) + panelLength / 3;
+        int y = random.nextInt(panelLength / 3) + panelLength / 3;
+        //确保周围不存在其他棋子
+        if (chessArray[x][y] == FiveChessView.NO_CHESS) {
+            return new Point(x, y);
+        } else {
+            return easyPoint();
+        }
+    }
     //AI先手或者用户先手第一次落子时，随机获取一个点落子
     private Point getStartPoint() {
         //该点是否可用标识
         boolean isUse = true;
         //在中间位置随机生成一个点
         Random random = new Random();
-        int x = random.nextInt(5) + 5;
-        int y = random.nextInt(5) + 5;
+        int x = random.nextInt(panelLength / 3) + panelLength / 3;
+        int y = random.nextInt(panelLength / 3) + panelLength / 3;
         //确保周围不存在其他棋子
         for (int i = x - 1; i <= x + 1; i++)
             for (int j = y - 1; j <= y + 1; j++) {

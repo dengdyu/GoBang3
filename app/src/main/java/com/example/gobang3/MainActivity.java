@@ -30,6 +30,9 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
     /*private Button exitB;//退出按钮*/
     private TextView whiteTurn, blackTurn;//显示谁的回合
     public boolean isUserBlack;//用户执黑棋吗
+    private Button easy;
+    private Button hard;
+    public int difficulty = -3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,18 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
             public void onClick(View v){
                 fiveChessView.undoMove1();
                 ai.undoMove2();
+            }
+        });
+        easy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                ai.setAiDiff(-1);
+            }
+        });
+        hard.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v){
+                ai.setAiDiff(-3);
             }
         });
 
@@ -82,6 +97,8 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         //玩家/ai回合标识
         whiteTurn = findViewById(R.id.white_turn);
         blackTurn = findViewById(R.id.black_turn);
+        easy = findViewById(R.id.button);
+        hard = findViewById(R.id.button2);
         //restartB = findViewById(R.id.restart_game);
         //重开游戏设置点击事件
         findViewById(R.id.restart_game).setOnClickListener(this);
