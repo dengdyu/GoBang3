@@ -12,10 +12,9 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.example.gobang3.*;
 
 public class MainActivity extends AppCompatActivity implements GameCallBack , AICallBack ,View.OnClickListener{
 
@@ -30,8 +29,7 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
     /*private Button exitB;//退出按钮*/
     private TextView whiteTurn, blackTurn;//显示谁的回合
     public boolean isUserBlack;//用户执黑棋吗
-    private Button easy;
-    private Button hard;
+    private RadioGroup difficultyB;
     public int difficulty = -3;
 
     @Override
@@ -59,16 +57,18 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
                 ai.undoMove2();
             }
         });
-        easy.setOnClickListener(new View.OnClickListener() {
+        difficultyB.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener () {
+            //一旦单选框状态改变
             @Override
-            public void onClick(View v){
-                ai.setAiDiff(-1);
-            }
-        });
-        hard.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v){
-                ai.setAiDiff(-3);
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                //根据id确定选择对象
+                if(checkedId == R.id.easy){
+                    ai.setAiDiff(-1);
+                    fiveChessView.resetGame();
+                }else if(checkedId == R.id.hard){
+                    ai.setAiDiff(-3);
+                    fiveChessView.resetGame();
+                }
             }
         });
 
@@ -97,8 +97,7 @@ public class MainActivity extends AppCompatActivity implements GameCallBack , AI
         //玩家/ai回合标识
         whiteTurn = findViewById(R.id.white_turn);
         blackTurn = findViewById(R.id.black_turn);
-        easy = findViewById(R.id.button);
-        hard = findViewById(R.id.button2);
+        difficultyB = findViewById(R.id.difficulty);
         //restartB = findViewById(R.id.restart_game);
         //重开游戏设置点击事件
         findViewById(R.id.restart_game).setOnClickListener(this);

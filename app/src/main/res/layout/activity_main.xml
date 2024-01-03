@@ -193,18 +193,24 @@
             android:text="重 玩"
             android:textSize="20sp" />
 
-        <Button
-            android:id="@+id/button"
+        <RadioGroup
+            android:id="@+id/difficulty"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="简单" />
-
-        <Button
-            android:id="@+id/button2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_toRightOf="@id/button"
-            android:text="难" />
+            android:orientation="horizontal" >
+            <RadioButton
+                android:id="@+id/easy"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="简单模式" />
+            <RadioButton
+                android:id="@+id/hard"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="20dp"
+                android:text="困难模式"
+                android:checked="true"/>
+        </RadioGroup>
 
 
     </RelativeLayout>

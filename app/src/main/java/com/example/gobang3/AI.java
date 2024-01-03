@@ -1,9 +1,5 @@
 package com.example.gobang3;
 
-import static android.content.Intent.getIntent;
-
-import android.content.Intent;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
